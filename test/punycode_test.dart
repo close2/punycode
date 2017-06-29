@@ -37,19 +37,11 @@ void main() {
       test(ex.description,
           () => expect(punycodeEncode(ex.original), ex.punyCode));
     });
-    /*test('bücher → xn--bcher-kva', () {
-      //expect(punycodeEncode('bücher'), 'xn--bcher-kva');
-      expect(punycodeEncode('bücher'), 'bcher-kva');
-    });*/
   });
   group('RFC punycode DECODE example tests', () {
     examples.forEach((StringPunyCode ex) {
       test(ex.description,
-              () => expect(punycodeDecode(ex.punyCode), ex.original));
+          () => expect(punycodeDecode(ex.punyCode), ex.original));
     });
-    /*test('bücher → xn--bcher-kva', () {
-      //expect(punycodeEncode('bücher'), 'xn--bcher-kva');
-      expect(punycodeEncode('bücher'), 'bcher-kva');
-    });*/
   });
 }
