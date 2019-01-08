@@ -1,11 +1,11 @@
 name: punycode
 description: An implementation of the punycode algorithm.
-version: 0.0.1
+version: 0.1.0
 homepage: https://github.com/close2/punycode
 author: Christian Loitsch <christian@loitsch.com>
 
 environment:
-  sdk: '>=1.20.1 <2.0.0'
+  sdk: '>=1.20.1 <3.0.0'
 
 dev_dependencies:
-  test: ^0.12.0
+  test: '>0.12.0 <2.0.0'
