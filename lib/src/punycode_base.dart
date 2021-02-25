@@ -42,7 +42,11 @@ bool _isDelim(int cp) => cp == _delimiter;
 int _decodeDigit(int cp) {
   return cp - 48 < 10
       ? cp - 22
-      : cp - 65 < 26 ? cp - 65 : cp - 97 < 26 ? cp - 97 : _base;
+      : cp - 65 < 26
+          ? cp - 65
+          : cp - 97 < 26
+              ? cp - 97
+              : _base;
 }
 
 // -- /* encode_digit(d,flag) returns the basic code point whose value      */
@@ -58,7 +62,7 @@ int _decodeDigit(int cp) {
 // --   /* 26..35 map to ASCII 0..9         */
 // -- }
 int _encodeDigit(int d, bool upperCase) {
-  int digit = d + 22;
+  var digit = d + 22;
   if (d < 26) {
     digit += 75;
   }
@@ -129,7 +133,7 @@ int _adapt(int delta, int numPoints, bool firstTime) {
 String punycodeEncode(String inputString, {bool upperCase: false}) {
   var input = inputString.runes.toList(growable: false);
 
-  final StringBuffer output = new StringBuffer();
+  final output = new StringBuffer();
   void toOut(int c) => output.writeCharCode(c);
   void allToOut(Iterable<int> cps) =>
       cps.forEach((cp) => output.writeCharCode(cp));
@@ -142,7 +146,10 @@ String punycodeEncode(String inputString, {bool upperCase: false}) {
   // --   delta = out = 0;
   // --   max_out = *output_length;
   // --   bias = initial_bias;
-  int n = _initialN, delta = 0, h, b, bias = _initialBias, j, m, q, k, t;
+  int n = _initialN;
+  int delta = 0, h, b, bias = _initialBias, j;
+  int? m;
+  int q, k, t;
 
   // --   /* Handle the basic code points: */
   // --   for (j = 0;  j < input_length;  ++j) {
@@ -194,7 +201,7 @@ String punycodeEncode(String inputString, {bool upperCase: false}) {
 
     // --     delta += (m - n) * (h + 1);
     // --     n = m;
-    delta += (m - n) * (h + 1);
+    delta += (m! - n) * (h + 1);
     n = m;
 
     // --     for (j = 0;  j < input_length;  ++j) {
@@ -223,7 +230,11 @@ String punycodeEncode(String inputString, {bool upperCase: false}) {
         q = delta;
         k = _base;
         for (;; k += _base) {
-          t = k <= bias ? _tMin : k >= bias + _tMax ? _tMax : k - bias;
+          t = k <= bias
+              ? _tMin
+              : k >= bias + _tMax
+                  ? _tMax
+                  : k - bias;
           if (q < t) break;
           toOut(_encodeDigit(t + (q - t) % (_base - t), false));
           q = (q - t) ~/ (_base - t);
@@ -263,7 +274,7 @@ String punycodeEncode(String inputString, {bool upperCase: false}) {
 // --   punycode_uint output[],
 // --   unsigned char case_flags[] )
 String punycodeDecode(String inputString) {
-  List<int> input = inputString.codeUnits;
+  var input = inputString.codeUnits;
   // -- {
   // --   punycode_uint n, out, i, max_out, bias,
   // --                  b, j, in, oldi, w, k, digit, t;
@@ -273,7 +284,7 @@ String punycodeDecode(String inputString) {
   // --   out = i = 0;
   // --   max_out = *output_length;
   // --   bias = initial_bias;
-  List<int> output = new List();
+  var output = <int>[];
   int n = _initialN,
       i = 0,
       bias = _initialBias,
@@ -342,6 +353,7 @@ String punycodeDecode(String inputString) {
     w = 1;
     k = _base;
     for (;; k += _base) {
+      // ignore: invariant_booleans
       if (iin >= input.length) {
         // ToDo improve Exception
         throw new Exception('Bad input.');
@@ -352,7 +364,11 @@ String punycodeDecode(String inputString) {
         throw new Exception('Bad input.');
       }
       i += digit * w;
-      t = k <= bias ? _tMin : k >= bias + _tMax ? _tMax : k - bias;
+      t = k <= bias
+          ? _tMin
+          : k >= bias + _tMax
+              ? _tMax
+              : k - bias;
       if (digit < t) break;
       w *= (_base - t);
     }
