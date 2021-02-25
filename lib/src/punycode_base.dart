@@ -110,12 +110,12 @@ int _encodeBasic(int bcp, bool upperCase) {
 // --
 // --   return k + (base - tmin + 1) * delta / (delta + skew);
 // -- }
-int _adapt(int? delta, int numPoints, bool firstTime) {
+int _adapt(int delta, int numPoints, bool firstTime) {
   int k;
-  delta = firstTime ? delta! ~/ _damp : delta! ~/ 2;
+  delta = firstTime ? delta ~/ _damp : delta ~/ 2;
   delta += delta ~/ numPoints;
 
-  for (k = 0; delta! > ((_base - _tMin) * _tMax) ~/ 2; k += _base) {
+  for (k = 0; delta > ((_base - _tMin) * _tMax) ~/ 2; k += _base) {
     delta ~/= _base - _tMin;
   }
 
@@ -148,7 +148,8 @@ String punycodeEncode(String inputString, {bool upperCase: false}) {
   // --   bias = initial_bias;
   int n = _initialN;
   int delta = 0, h, b, bias = _initialBias, j;
-  int? m, q, k, t;
+  int? m;
+  int q, k, t;
 
   // --   /* Handle the basic code points: */
   // --   for (j = 0;  j < input_length;  ++j) {
@@ -229,12 +230,12 @@ String punycodeEncode(String inputString, {bool upperCase: false}) {
         q = delta;
         k = _base;
         for (;; k += _base) {
-          t = k! <= bias
+          t = k <= bias
               ? _tMin
               : k >= bias + _tMax
                   ? _tMax
                   : k - bias;
-          if (q! < t) break;
+          if (q < t) break;
           toOut(_encodeDigit(t + (q - t) % (_base - t), false));
           q = (q - t) ~/ (_base - t);
         }
