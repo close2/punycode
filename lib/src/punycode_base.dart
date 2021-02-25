@@ -62,7 +62,7 @@ int _decodeDigit(int cp) {
 // --   /* 26..35 map to ASCII 0..9         */
 // -- }
 int _encodeDigit(int d, bool upperCase) {
-  int digit = d + 22;
+  var digit = d + 22;
   if (d < 26) {
     digit += 75;
   }
@@ -133,7 +133,7 @@ int _adapt(int delta, int numPoints, bool firstTime) {
 String punycodeEncode(String inputString, {bool upperCase: false}) {
   var input = inputString.runes.toList(growable: false);
 
-  final StringBuffer output = new StringBuffer();
+  final output = new StringBuffer();
   void toOut(int c) => output.writeCharCode(c);
   void allToOut(Iterable<int> cps) =>
       cps.forEach((cp) => output.writeCharCode(cp));
@@ -274,7 +274,7 @@ String punycodeEncode(String inputString, {bool upperCase: false}) {
 // --   punycode_uint output[],
 // --   unsigned char case_flags[] )
 String punycodeDecode(String inputString) {
-  List<int> input = inputString.codeUnits;
+  var input = inputString.codeUnits;
   // -- {
   // --   punycode_uint n, out, i, max_out, bias,
   // --                  b, j, in, oldi, w, k, digit, t;
@@ -284,7 +284,7 @@ String punycodeDecode(String inputString) {
   // --   out = i = 0;
   // --   max_out = *output_length;
   // --   bias = initial_bias;
-  List<int> output = <int>[];
+  var output = <int>[];
   int n = _initialN,
       i = 0,
       bias = _initialBias,
